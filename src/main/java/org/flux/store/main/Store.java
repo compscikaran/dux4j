@@ -58,4 +58,8 @@ public class Store<T extends State> {
         this.state = this.timeTravel.getCurrentState();
         this.notifyListeners();
     }
+
+    public List<String> getActionHistory() {
+        return this.timeTravel.getActionHistory();
+    }
 }

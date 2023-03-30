@@ -38,4 +38,9 @@ public class TimeTravel<T> {
             index --;
     }
 
+    public List<String> getActionHistory() {
+        return this.actions.subList(0,index);
+    }
+
+
 }
