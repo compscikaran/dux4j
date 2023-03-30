@@ -15,7 +15,7 @@ public class Utilities {
         return (action, state) -> {
             T newState = state;
             for (Reducer<T> reducer: reducers){
-                newState = reducer.reduce(action, state);
+                newState = reducer.reduce(action, newState);
             }
             return newState;
         };
