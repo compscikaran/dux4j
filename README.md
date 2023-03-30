@@ -14,7 +14,6 @@ So I set out to implement the same in the language I use everyday.
 
 PENDING
 
-------------------------
 ## How to use it
 
 1. Create class representing your Application State
