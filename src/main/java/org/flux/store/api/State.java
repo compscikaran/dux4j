@@ -12,5 +12,7 @@ public interface State extends Diffable<State>, Cloneable {
         return new ReflectionDiffBuilder<>(this, p, ToStringStyle.SIMPLE_STYLE)
                 .build();
     }
+
+    State clone();
 }
 

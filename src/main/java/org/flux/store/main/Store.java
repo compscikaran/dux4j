@@ -27,7 +27,7 @@ public class Store<T extends State> {
     }
 
     public void dispatch(Action action) {
-        T newState = reducer.reduce(action, state);
+        T newState = reducer.reduce(action, (T) state.clone());
         DiffResult diffResult = newState.diff(state);
         boolean isChanged = diffResult.getNumberOfDiffs() > 0;
         if(isChanged) {

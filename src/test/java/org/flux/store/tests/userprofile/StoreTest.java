@@ -15,16 +15,15 @@ public class StoreTest {
     public void init() {
         UserProfile initialState = new UserProfile("Karan", "karan@hello.com");
         myStore = new Store<>(initialState, (action, state) -> {
-            UserProfile newState = state.clone();
             switch (action.getType()) {
                 case "SET_EMAIL":
                     String newEmail = action.getPayload().toString();
-                    newState.setEmail(newEmail);
+                    state.setEmail(newEmail);
                     break;
                 default:
                     throw new RuntimeException("Action Type not supported by reudcer");
             }
-            return newState;
+            return state;
         });
     }
 
