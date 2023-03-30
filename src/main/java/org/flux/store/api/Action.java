@@ -1,8 +1,10 @@
 package org.flux.store.api;
 
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public final class Action<T> {
 
     private final String type;

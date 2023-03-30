@@ -1,10 +1,6 @@
-package org.flux.store.tests.userprofile;
+package org.flux.store.tests.userprofile.domain;
 
 import lombok.*;
-import lombok.experimental.Wither;
-import org.apache.commons.lang3.builder.DiffResult;
-import org.apache.commons.lang3.builder.ReflectionDiffBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.flux.store.api.State;
 
 @Getter
