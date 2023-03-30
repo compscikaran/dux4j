@@ -9,11 +9,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class StoreTest {
 
+    public static final String INITIAL_EMAIL = "karan@hello.com";
+    public static final String INITIAL_NAME = "Karan";
+
     private Store<UserProfile> myStore;
 
     @BeforeEach
     public void init() {
-        UserProfile initialState = new UserProfile("Karan", "karan@hello.com");
+        UserProfile initialState = new UserProfile(INITIAL_NAME, INITIAL_EMAIL);
         myStore = new Store<>(initialState, (action, state) -> {
             switch (action.getType()) {
                 case "SET_EMAIL":
@@ -32,8 +35,7 @@ public class StoreTest {
         String newEmail = "karan@gmail.com";
         Action<String> action = Utilities.actionCreator("SET_EMAIL", newEmail);
         myStore.dispatch(action);
-        UserProfile newState = myStore.getState();
-        assertEquals(newEmail, newState.getEmail());
+        assertEquals(newEmail, myStore.getState().getEmail());
     }
 
     @Test
@@ -45,5 +47,24 @@ public class StoreTest {
             assertNotNull(x);
         });
         myStore.dispatch(action);
+    }
+
+    @Test
+    public void canTravelBack() {
+        String newEmail = "karan@gmail.com";
+        Action<String> action = Utilities.actionCreator("SET_EMAIL", newEmail);
+        myStore.dispatch(action);
+        myStore.goBack();
+        assertEquals(INITIAL_EMAIL, myStore.getState().getEmail());
+    }
+
+    @Test
+    public void canTravelForward() {
+        String newEmail = "karan@gmail.com";
+        Action<String> action = Utilities.actionCreator("SET_EMAIL", newEmail);
+        myStore.dispatch(action);
+        myStore.goBack();
+        myStore.goForward();
+        assertEquals(newEmail, myStore.getState().getEmail());
     }
 }

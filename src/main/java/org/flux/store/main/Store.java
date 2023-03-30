@@ -11,15 +11,17 @@ import java.util.function.Consumer;
 
 public class Store<T extends State> {
 
+    public static final String INITIAL_ACTION = "STORE_INITIALIZATION";
     private Reducer<T> reducer;
-
+    private TimeTravel<T> timeTravel;
     private T state;
-
     public List<Consumer<T>> listeners = new ArrayList<>();
 
     public Store(T initialState, Reducer<T> reducer) {
         this.state = initialState;
         this.reducer = reducer;
+        this.timeTravel = new TimeTravel<>();
+        this.timeTravel.recordChange(INITIAL_ACTION, initialState);
     }
 
     public void subscribe(Consumer<T> fn) {
@@ -32,11 +34,32 @@ public class Store<T extends State> {
         boolean isChanged = diffResult.getNumberOfDiffs() > 0;
         if(isChanged) {
             this.state = newState;
-            this.listeners.forEach(l -> l.accept(this.state));
+            this.timeTravel.recordChange(action.getType(), newState);
+            this.notifyListeners();
         }
     }
 
     public T getState() {
         return this.state;
+    }
+
+    private void notifyListeners() {
+        this.listeners.forEach(l -> l.accept(this.state));
+    }
+
+    public void goBack() {
+        this.timeTravel.goBack();
+        this.state = this.timeTravel.getCurrentState();
+        this.notifyListeners();
+    }
+
+    public void goForward() {
+        this.timeTravel.goForward();
+        this.state = this.timeTravel.getCurrentState();
+        this.notifyListeners();
+    }
+
+    public List<String> getActionHistory() {
+        return this.timeTravel.getActionHistory();
     }
 }
