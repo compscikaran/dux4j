@@ -2,8 +2,11 @@ package org.flux.store.tests.userprofile;
 
 import org.flux.store.api.Action;
 import org.flux.store.api.Reducer;
-import org.flux.store.main.Store;
+import org.flux.store.main.DuxStore;
 import org.flux.store.main.Utilities;
+import org.flux.store.tests.userprofile.domain.Author;
+import org.flux.store.tests.userprofile.domain.Book;
+import org.flux.store.tests.userprofile.domain.CombinedState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +19,7 @@ public class CombinedReducerTest {
     public static final String ACTION_SET_BOOK = "SET_BOOK";
     public static final String ACTION_SET_AUTHOR = "SET_AUTHOR";
 
-    private Store<CombinedState> myStore;
+    private DuxStore<CombinedState> myStore;
 
     @BeforeEach
     public void init() {
@@ -47,7 +50,7 @@ public class CombinedReducerTest {
 
         Reducer<CombinedState> reducer = Utilities.combineReducer(authorReducer, bookReducer);
 
-        myStore = new Store<>(initialState, reducer);
+        myStore = new DuxStore<>(initialState, reducer);
     }
 
     @Test
