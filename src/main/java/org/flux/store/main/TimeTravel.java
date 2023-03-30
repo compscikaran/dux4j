@@ -39,7 +39,7 @@ public class TimeTravel<T> {
     }
 
     public List<String> getActionHistory() {
-        return this.actions.subList(0,index);
+        return this.actions.subList(0,index+1);
     }
 
 
