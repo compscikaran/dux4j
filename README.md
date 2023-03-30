@@ -68,3 +68,13 @@ Combining Reducers
 Reducer<UserProfile> combined = Utilities.combineReducer(<reducer 1>, <reducer 2>...);
 ```
 
+## Time Travel Debugging
+
+While you are debugging your application you can move backwards and forwards through the application.
+This works by saving a complete history of states
+
+```java
+myStore.goBack();
+
+myStore.goForward();
+```
