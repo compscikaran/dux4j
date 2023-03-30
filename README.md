@@ -78,3 +78,21 @@ myStore.goBack();
 
 myStore.goForward();
 ```
+
+## Middleware Support
+
+Optionally attach a middleware to store which as expected takes store, next and action.
+Footgun -  if you don't call next function within the middleware then the action will never be dispatched to the store.
+```java
+Middleware<UserProfile> middleware = (store, next, action) -> {
+    System.out.println(action);
+    if(<some condition>) {
+        Action newAction = ...
+        next.accept(newAction);
+    } else {
+        next.accept(action);
+    }
+};
+
+myStore = new DuxStore<>(initialState, reducer, middleware);
+```
