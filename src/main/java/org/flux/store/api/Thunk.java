@@ -5,5 +5,5 @@ import java.util.function.Supplier;
 
 public interface Thunk<T extends State> {
 
-    void process(Consumer<Action> next, Supplier<T> getState);
+    void process(Consumer<Action> dispatch, Supplier<T> getState);
 }
