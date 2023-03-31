@@ -42,6 +42,11 @@ public class DuxStore<T extends State> implements Store<T> {
         }
     }
 
+    @Override
+    public void dispatch(Thunk<T> action) {
+        action.process(this::dispatch, this::getState);
+    }
+
     private void dispatchInternal(Action action) {
         T newState = reducer.reduce(action, (T) state.clone());
         DiffResult diffResult = newState.diff(state);

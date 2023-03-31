@@ -41,6 +41,18 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
             <version>5.2.0</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.9.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

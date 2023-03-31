@@ -6,6 +6,7 @@ public interface Store<T extends State> {
 
     void subscribe(Consumer<T> fn);
     void dispatch(Action action);
+    void dispatch(Thunk<T> thunk);
     T getState();
     void replaceReducer(Reducer<T> newReducer);
 }
