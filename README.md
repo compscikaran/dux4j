@@ -6,13 +6,36 @@ Redux like unidirectional state management implementation for Java.
 
 ## How the idea came about
 
-The idea came about when I had finished Dan Abramov's interview and demo of redux, and I thought to myself why this kind of pattern does not exist in java.
+The idea came about when I had finished Facebook's Talk on Flux Architecture and seen few of Dan Abramov's interviews, and I thought to myself why this kind of pattern does not exist in java.
 So I set out to implement the same in the language I use everyday.
 
 ------------------------
+
+## What is Flux / Redux
+
+Here is a quick summary of the Flux Architecture - https://karan-gupta.notion.site/Flux-Architecture-380f183b11744906821e687fceecc6c9
+
 ## How to install it
 
-PENDING
+Add GitHub maven repository to your pom.xml
+```xml
+<distributionManagement>
+    <repository>
+        <id>github</id>
+        <name>GitHub compscikaran Apache Maven Packages</name>
+        <url>https://maven.pkg.github.com/compscikaran/dux-java</url>
+    </repository>
+</distributionManagement>
+```
+
+Add the library as a maven dependency
+```xml
+<dependency>
+    <groupId>org.compscikaran</groupId>
+    <artifactId>dux-java</artifactId>
+    <version>1.1.0</version>
+</dependency>
+```
 
 ## How to use it
 
@@ -49,50 +72,4 @@ Store<UserProfile> myStore = new Store<>(initialState, (action, state) -> {
 3. Dispatching Actions
 ```java
 myStore.dispatch(new Action<String>("SET_EMAIL", "karan@gmail.com"));
-```
-
-## Usefull Utilities
-
-Adding subscribers functions to store
-```java
-myStore.subscribe(x -> {
-    System.out.println("State has changed...");
-});
-```
-Creating Actions using actionCreator
-```java
-Action<String> action = Utilities.actionCreator("SET_EMAIL", newEmail);
-```
-Combining Reducers
-```java
-Reducer<UserProfile> combined = Utilities.combineReducer(<reducer 1>, <reducer 2>...);
-```
-
-## Time Travel Debugging
-
-While you are debugging your application you can move backwards and forwards through the application.
-This works by saving a complete history of states
-
-```java
-myStore.goBack();
-
-myStore.goForward();
-```
-
-## Middleware Support
-
-Optionally attach a middleware to store which as expected takes store, next and action.
-Footgun -  if you don't call next function within the middleware then the action will never be dispatched to the store.
-```java
-Middleware<UserProfile> middleware = (store, next, action) -> {
-    System.out.println(action);
-    if(<some condition>) {
-        Action newAction = ...
-        next.accept(newAction);
-    } else {
-        next.accept(action);
-    }
-};
-
-myStore = new DuxStore<>(initialState, reducer, middleware);
 ```
