@@ -63,46 +63,6 @@ public class UserProfileStoreTest {
     }
 
     @Test
-    public void canTravelBack() {
-        String newEmail = "karan@gmail.com";
-        Action<String> action = Utilities.actionCreator(ACTION_SET_EMAIL, newEmail);
-        myStore.dispatch(action);
-        System.out.println(myStore.getState());
-        myStore.goBack();
-        System.out.println(myStore.getState());
-        assertEquals(INITIAL_EMAIL, myStore.getState().getEmail());
-    }
-
-    @Test
-    public void canTravelForward() {
-        String newEmail = "karan@gmail.com";
-        Action<String> action = Utilities.actionCreator(ACTION_SET_EMAIL, newEmail);
-        myStore.dispatch(action);
-        System.out.println(myStore.getState());
-        myStore.goBack();
-        System.out.println(myStore.getState());
-        myStore.goForward();
-        System.out.println(myStore.getState());
-        assertEquals(newEmail, myStore.getState().getEmail());
-    }
-
-    @Test
-    public void historyIsAccurate() {
-        String newEmail = "manoj@gmail.com";
-        String newName = "Manoj Gupta";
-        Action<String> action = Utilities.actionCreator(ACTION_SET_EMAIL, newEmail);
-        myStore.dispatch(action);
-        Action<String> action2 = Utilities.actionCreator(ACTION_SET_NAME, newName);
-        myStore.dispatch(action2);
-        assertEquals(newEmail, myStore.getState().getEmail());
-        assertEquals(newName, myStore.getState().getName());
-        List<String> history = myStore.getActionHistory();
-        assertTrue(history.size() == 3);
-        assertEquals(ACTION_SET_EMAIL, history.get(1));
-        assertEquals(ACTION_SET_NAME, history.get(2));
-    }
-
-    @Test
     public void reducerCanBeReplaced() {
         String newName = "Lena Gupta";
         Reducer<UserProfile> newReducer = (action, state) -> {

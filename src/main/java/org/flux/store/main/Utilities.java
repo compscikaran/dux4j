@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 
 public class Utilities {
+
+    public static final String INITIAL_ACTION = "STORE_INITIALIZATION";
+
     public static <T> Action<T> actionCreator(String actionType, T payload) {
         return new Action<T>(actionType, payload);
     }

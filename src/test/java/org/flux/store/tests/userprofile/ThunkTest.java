@@ -71,7 +71,7 @@ public class ThunkTest {
             });
         };
         myStore.dispatch(updateUserFromAPI);
-        Thread.sleep(5000);
+        Thread.sleep(3000);
         System.out.println("New State: " + myStore.getState());
         assertEquals(SAMPLE_NAME, myStore.getState().getName());
         assertEquals(SAMPLE_EMAIL, myStore.getState().getEmail());
