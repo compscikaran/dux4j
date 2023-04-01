@@ -31,9 +31,9 @@ public class Utilities {
             for (int i = 0; i < middlewares.length; i++) {
                 Middleware<T> element = middlewares[i];
                 if(i < middlewares.length -1) {
-                    element.run(store, updatedAction::set, action);
+                    element.run(store, updatedAction::set, updatedAction.get());
                 } else {
-                    element.run(store, next, action);
+                    element.run(store, next, updatedAction.get());
                 }
             }
         };
