@@ -11,9 +11,9 @@ So I set out to implement the same in the language I use everyday.
 
 ------------------------
 
-## What is Flux / Redux
+## What is DuxJava
 
-Here is a quick summary of the Flux Architecture - https://karan-gupta.notion.site/Flux-Architecture-380f183b11744906821e687fceecc6c9
+Here is some documentation - https://github.com/compscikaran/dux-java/wiki
 
 ## How to install it
 
