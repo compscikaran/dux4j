@@ -1,8 +1,10 @@
 package org.flux.store.main;
 
+import com.google.gson.Gson;
 import org.apache.commons.lang3.builder.DiffResult;
 import org.flux.store.api.*;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -105,5 +107,17 @@ public class DuxStore<T extends State> implements Store<T> {
 
     public List<String> getActionHistory() {
         return this.timeTravel.getActionTypeHistory();
+    }
+
+    public String exportStore() {
+        Gson gson = new Gson();
+        return gson.toJson(this.state);
+    }
+
+    public void importStore(String json, Type type) {
+        Gson gson = new Gson();
+        T state = gson.fromJson(json, type);
+        this.state = state;
+        this.notifyListeners();
     }
 }
