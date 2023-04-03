@@ -1,11 +1,15 @@
 package org.flux.store.tests.userprofile.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.flux.store.api.State;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class CombinedState implements State {
     private Book book;
     private Author author;
