@@ -75,7 +75,7 @@ Reducer<UserProfile> reducer = (action, state) -> {
             state.setName(newName);
             break;
     }
-    return newState;
+    return state;
 });
 
 Store<UserProfile> myStore = new Store<>(initialState, reducer);
