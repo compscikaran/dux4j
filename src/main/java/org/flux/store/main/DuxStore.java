@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import org.apache.commons.lang3.builder.DiffResult;
 import org.flux.store.api.*;
 import org.flux.store.kafka.Producer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -12,6 +14,8 @@ import java.util.Properties;
 import java.util.function.Consumer;
 
 public class DuxStore<T extends State> implements Store<T> {
+
+    private static Logger log = LoggerFactory.getLogger(DuxStore.class);
 
     private Reducer<T> reducer;
     private TimeTravel<T> timeTravel;
@@ -129,7 +133,7 @@ public class DuxStore<T extends State> implements Store<T> {
             this.producer = new Producer(properties, topic);
             this.subscribe(x -> this.sendMessageToKafka());
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.error("Could not initialize Producer", ex);
         }
     }
 
@@ -144,7 +148,7 @@ public class DuxStore<T extends State> implements Store<T> {
                 producer.sendMessage(this.exportStore());
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.error("Could not send state to Kafka", ex);
         }
     }
 }
