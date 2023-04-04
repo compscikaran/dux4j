@@ -15,6 +15,12 @@ So I set out to implement the same in the language I use everyday.
 
 Here is some documentation - https://github.com/compscikaran/dux-java/wiki
 
+Key Features -
+1. Simple Redux like Unidirectional application store
+2. Supports all the familiar patterns such as reducers, subscribers, actions, action creators, thunks
+3. Time travel debugging which allows to go to any previous or forward state in the store's history
+4. Allow back and restore of application state and syncing application state to persistant storage
+
 ## How to install it
 
 Add GitHub maven repository to your pom.xml
