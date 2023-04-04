@@ -33,7 +33,7 @@ Add the library as a maven dependency
 <dependency>
     <groupId>org.compscikaran</groupId>
     <artifactId>dux-java</artifactId>
-    <version>1.1.0</version>
+    <version>get the latest version from packages section</version>
 </dependency>
 ```
 
