@@ -66,11 +66,13 @@ public class UserProfile implements State {
 ```java
 Store<UserProfile> myStore = new Store<>(initialState, (action, state) -> {
             switch (action.getType()) {
-                case "SET_EMAIL":
-                    //...
+                case ACTION_SET_EMAIL:
+                    String newEmail = action.getPayload().toString();
+                    state.setEmail(newEmail);
                     break;
-                case "SET_NAME": 
-                    //...
+                case ACTION_SET_NAME:
+                    String newName = action.getPayload().toString();
+                    state.setName(newName);
                     break;
             }
             return newState;
