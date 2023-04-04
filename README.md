@@ -64,19 +64,22 @@ public class UserProfile implements State {
 ```
 2. Create a new Store by passing in initial state and a Reducer function
 ```java
-Store<UserProfile> myStore = new Store<>(initialState, (action, state) -> {
-            switch (action.getType()) {
-                case ACTION_SET_EMAIL:
-                    String newEmail = action.getPayload().toString();
-                    state.setEmail(newEmail);
-                    break;
-                case ACTION_SET_NAME:
-                    String newName = action.getPayload().toString();
-                    state.setName(newName);
-                    break;
-            }
-            return newState;
-        });
+Reducer<UserProfile> reducer = (action, state) -> {
+    switch (action.getType()) {
+        case ACTION_SET_EMAIL:
+            String newEmail = action.getPayload().toString();
+            state.setEmail(newEmail);
+            break;
+        case ACTION_SET_NAME:
+            String newName = action.getPayload().toString();
+            state.setName(newName);
+            break;
+    }
+    return newState;
+});
+
+Store<UserProfile> myStore = new Store<>(initialState, reducer);
+
 ```
 3. Dispatching Actions
 ```java
