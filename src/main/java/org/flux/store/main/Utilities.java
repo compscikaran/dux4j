@@ -2,8 +2,10 @@ package org.flux.store.main;
 
 import org.flux.store.api.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
@@ -37,5 +39,22 @@ public class Utilities {
                 }
             }
         };
+    }
+
+    public static <T extends State> DuxSlice<T> createSlice(SliceInput<T> input) {
+        T initialState = input.getInitialState();
+        Map<String, Reducer<T>> reducers = input.getReducers();
+        Reducer<T> reducer = (action, state) -> {
+            for (String key: reducers.keySet()) {
+                if(action.getType().equalsIgnoreCase(key)) {
+                    Reducer<T> current = reducers.get(key);
+                    state = current.reduce(action,state);
+                }
+            }
+            return state;
+        };
+        DuxStore<T> myStore = new DuxStore<>(initialState, reducer);
+        DuxSlice<T> slice = new DuxSlice<>(myStore, new ArrayList<>(reducers.keySet()));
+        return slice;
     }
 }
