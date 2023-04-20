@@ -1,12 +1,9 @@
 package org.flux.store.main;
 
 import lombok.AllArgsConstructor;
-import org.flux.store.api.Action;
-import org.flux.store.api.ActionCall;
 import org.flux.store.api.State;
 
 import java.util.List;
-import java.util.Set;
 
 @AllArgsConstructor
 public class DuxSlice<T extends State> {
