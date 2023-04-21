@@ -1,5 +1,6 @@
 package org.flux.store.tests.userprofile;
 
+import org.flux.store.api.InvalidActionException;
 import org.flux.store.main.DuxSlice;
 import org.flux.store.tests.userprofile.domain.UserProfile;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +39,7 @@ public class SliceTest {
     }
 
     @Test
-    public void canUpdateSliceWithValidAction() {
+    public void canUpdateSliceWithValidAction() throws InvalidActionException {
         String newName = "Manoj Gupta";
         String newEmail = "manoj@hello.com";
         Consumer setEmail = slice.getAction("setEmail");
@@ -51,6 +52,6 @@ public class SliceTest {
 
     @Test
     public void failUpdateSliceWithInvalidAction() {
-        assertThrows(IllegalArgumentException.class, () -> slice.getAction("updateEmail"));
+        assertThrows(InvalidActionException.class, () -> slice.getAction("updateEmail"));
     }
 }

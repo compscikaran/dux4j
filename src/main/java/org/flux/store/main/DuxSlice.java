@@ -1,5 +1,6 @@
 package org.flux.store.main;
 
+import org.flux.store.api.InvalidActionException;
 import org.flux.store.api.Reducer;
 import org.flux.store.api.State;
 
@@ -38,9 +39,9 @@ public class DuxSlice<T extends State> {
         return slice;
     }
 
-    public Consumer getAction(String type) {
+    public Consumer getAction(String type) throws InvalidActionException {
         if(!actions.contains(type))
-            throw new IllegalArgumentException("Action type " + type + " does not exist on slice");
+            throw new InvalidActionException("Action type does not exist on slice" + this.name);
         return payload -> store.dispatch(Utilities.actionCreator(type, payload));
     }
 
