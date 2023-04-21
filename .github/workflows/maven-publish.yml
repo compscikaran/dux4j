@@ -30,5 +30,7 @@ jobs:
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
     - name: Publish to GitHub Packages Apache Maven
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
       run: mvn clean deploy -s $GITHUB_WORKSPACE/settings.xml -Djaas.config="$KAFKA_CONFIG" -Dbootstrap.servers="$KAFKA_CLUSTER" -Dkafka.topic=dux_test
 
