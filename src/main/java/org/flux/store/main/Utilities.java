@@ -54,6 +54,9 @@ public class Utilities {
             return state;
         };
         DuxStore<T> myStore = new DuxStore<>(initialState, reducer);
+        for (Consumer<T> subscriber: input.getSubscribers()) {
+            myStore.subscribe(subscriber);
+        }
         DuxSlice<T> slice = new DuxSlice<>(myStore, new ArrayList<>(reducers.keySet()));
         return slice;
     }
