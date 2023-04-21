@@ -40,24 +40,4 @@ public class Utilities {
             }
         };
     }
-
-    public static <T extends State> DuxSlice<T> createSlice(SliceInput<T> input) {
-        T initialState = input.getInitialState();
-        Map<String, Reducer<T>> reducers = input.getReducers();
-        Reducer<T> reducer = (action, state) -> {
-            for (String key: reducers.keySet()) {
-                if(action.getType().equalsIgnoreCase(key)) {
-                    Reducer<T> current = reducers.get(key);
-                    state = current.reduce(action,state);
-                }
-            }
-            return state;
-        };
-        DuxStore<T> myStore = new DuxStore<>(initialState, reducer);
-        for (Consumer<T> subscriber: input.getSubscribers()) {
-            myStore.subscribe(subscriber);
-        }
-        DuxSlice<T> slice = new DuxSlice<>(myStore, new ArrayList<>(reducers.keySet()));
-        return slice;
-    }
 }
