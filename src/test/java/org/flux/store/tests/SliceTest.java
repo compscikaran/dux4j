@@ -1,8 +1,8 @@
-package org.flux.store.tests.userprofile;
+package org.flux.store.tests;
 
 import org.flux.store.api.InvalidActionException;
 import org.flux.store.main.DuxSlice;
-import org.flux.store.tests.userprofile.domain.UserProfile;
+import org.flux.store.tests.domain.UserProfile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

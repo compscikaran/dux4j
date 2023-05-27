@@ -25,6 +25,8 @@ public class DuxStore<T extends State> implements Store<T> {
     private Producer producer;
     private Gson gson = new Gson();
 
+    private boolean asyncFlag;
+
     public DuxStore(T initialState, Reducer<T> reducer) {
         this.state = initialState;
         this.reducer = reducer;
@@ -92,7 +94,11 @@ public class DuxStore<T extends State> implements Store<T> {
     }
 
     private void notifyListeners() {
-        this.listeners.forEach(l -> l.accept(this.state));
+        if(!asyncFlag) {
+            this.listeners.forEach(l -> l.accept(this.state));
+        } else {
+            this.listeners.forEach(l -> AsyncProcessor.submitNotify(l, this.state));
+        }
     }
 
     public void goBack() {
@@ -135,6 +141,10 @@ public class DuxStore<T extends State> implements Store<T> {
         } catch (Exception ex) {
             log.error("Could not initialize Producer", ex);
         }
+    }
+
+    public void enableAsyncNotifications() {
+        this.asyncFlag = true;
     }
 
     private void killProducer() {

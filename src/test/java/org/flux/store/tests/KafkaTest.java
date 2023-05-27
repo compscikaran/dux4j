@@ -1,18 +1,16 @@
-package org.flux.store.tests.userprofile;
+package org.flux.store.tests;
 
 import org.flux.store.api.Action;
 import org.flux.store.api.Reducer;
 import org.flux.store.main.DuxStore;
 import org.flux.store.main.Utilities;
-import org.flux.store.tests.userprofile.domain.Author;
-import org.flux.store.tests.userprofile.domain.Book;
-import org.flux.store.tests.userprofile.domain.CombinedState;
+import org.flux.store.tests.domain.Author;
+import org.flux.store.tests.domain.Book;
+import org.flux.store.tests.domain.CombinedState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Properties;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class KafkaTest {
 

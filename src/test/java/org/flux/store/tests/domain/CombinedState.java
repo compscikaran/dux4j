@@ -1,4 +1,4 @@
-package org.flux.store.tests.userprofile.domain;
+package org.flux.store.tests.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

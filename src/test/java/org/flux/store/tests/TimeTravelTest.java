@@ -1,9 +1,9 @@
-package org.flux.store.tests.userprofile;
+package org.flux.store.tests;
 
 import org.flux.store.api.Action;
 import org.flux.store.main.DuxStore;
 import org.flux.store.main.Utilities;
-import org.flux.store.tests.userprofile.domain.UserProfile;
+import org.flux.store.tests.domain.UserProfile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
