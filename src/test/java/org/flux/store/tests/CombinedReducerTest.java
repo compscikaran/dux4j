@@ -1,20 +1,18 @@
-package org.flux.store.tests.userprofile;
+package org.flux.store.tests;
 
 import org.flux.store.api.Action;
 import org.flux.store.api.Reducer;
 import org.flux.store.main.DuxStore;
 import org.flux.store.main.Utilities;
-import org.flux.store.tests.userprofile.domain.Author;
-import org.flux.store.tests.userprofile.domain.Book;
-import org.flux.store.tests.userprofile.domain.CombinedState;
+import org.flux.store.tests.domain.Author;
+import org.flux.store.tests.domain.Book;
+import org.flux.store.tests.domain.CombinedState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Properties;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-public class KafkaTest {
+public class CombinedReducerTest {
 
     public static final String INITIAL_BOOK = "The Making of a manager";
     public static final String INITIAL_AUTHOR = "Julie Zhou";
@@ -26,14 +24,22 @@ public class KafkaTest {
     @BeforeEach
     public void init() {
 
-        CombinedState initialState = new CombinedState(new Book(INITIAL_BOOK),new Author(INITIAL_AUTHOR));
+        CombinedState initialState = new CombinedState();
+        initialState.setBook(new Book(INITIAL_BOOK));
+        initialState.setAuthor(new Author(INITIAL_AUTHOR));
 
-        Reducer<CombinedState> reducer = (action, state) -> {
+        Reducer<CombinedState> authorReducer = (action, state) -> {
             switch (action.getType()) {
                 case ACTION_SET_AUTHOR:
                     Author author = (Author) action.getPayload();
                     state.setAuthor(author);
                     break;
+            }
+            return state;
+        };
+
+        Reducer<CombinedState> bookReducer = (action, state) -> {
+            switch (action.getType()) {
                 case ACTION_SET_BOOK:
                     Book book = (Book) action.getPayload();
                     state.setBook(book);
@@ -41,27 +47,24 @@ public class KafkaTest {
             }
             return state;
         };
+
+        Reducer<CombinedState> reducer = Utilities.combineReducer(authorReducer, bookReducer);
+
         myStore = new DuxStore<>(initialState, reducer);
-        myStore.subscribe(System.out::println);
     }
 
     @Test
-    public void canSendFullFeedToKafkaTopic() {
-        Properties properties = new Properties();
-        String jaasConfig = System.getProperty("jaas.config");
-        String cluster = System.getProperty("bootstrap.servers");
-        String topicName = System.getProperty("kafka.topic");
-        properties.setProperty("security.protocol", "SASL_SSL");
-        properties.setProperty("sasl.mechanism", "PLAIN");
-        properties.setProperty("sasl.jaas.config", jaasConfig);
-        properties.setProperty("bootstrap.servers", cluster);
-        myStore.initializeKafkaProducer(properties, topicName);
+    public void separateReducersCanUpdateSeparateSlices() {
         String newBook = "Invent and Wander";
         String newAuthor = "Jeff Bezos";
         Action<Author> action1 = Utilities.actionCreator(ACTION_SET_AUTHOR, new Author(newAuthor));
         Action<Book> action2 = Utilities.actionCreator(ACTION_SET_BOOK, new Book(newBook));
+        System.out.println(myStore.getState());
         myStore.dispatch(action1);
+        System.out.println(myStore.getState());
         myStore.dispatch(action2);
+        System.out.println(myStore.getState());
+        assertEquals(newAuthor, myStore.getState().getAuthor().getName());
+        assertEquals(newBook, myStore.getState().getBook().getName());
     }
-
 }

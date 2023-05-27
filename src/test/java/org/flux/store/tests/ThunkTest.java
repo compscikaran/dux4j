@@ -1,4 +1,4 @@
-package org.flux.store.tests.userprofile;
+package org.flux.store.tests;
 
 import com.google.gson.Gson;
 import okhttp3.*;
@@ -6,16 +6,13 @@ import org.flux.store.api.Action;
 import org.flux.store.api.Thunk;
 import org.flux.store.main.DuxStore;
 import org.flux.store.main.Utilities;
-import org.flux.store.tests.userprofile.domain.User;
-import org.flux.store.tests.userprofile.domain.UserProfile;
+import org.flux.store.tests.domain.User;
+import org.flux.store.tests.domain.UserProfile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
