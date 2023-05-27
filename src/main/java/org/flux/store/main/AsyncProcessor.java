@@ -15,7 +15,7 @@ public class AsyncProcessor {
     public static <T> void submitNotify(Consumer<T> fn, T state) {
         CompletableFuture
                 .runAsync(() -> fn.accept(state))
-                .thenRun(() -> log.info("Notified subscriber successfully " + fn))
+                .thenRun(() -> log.info("Notified subscriber successfully"))
                 .exceptionally(throwable -> {
                     log.error("Could not notify subscriber", new AsyncNotificationException(throwable));
                     return null;
