@@ -72,10 +72,14 @@ public class DuxStore<T extends State> implements Store<T> {
     }
 
     private void dispatchNoNotify(Action action) {
-        if(action.getType().equalsIgnoreCase(Utilities.INITIAL_ACTION))
-            return;
-        T newState = reducer.reduce(action, (T) state.clone());
-        this.state = newState;
+        if(action.getType().equalsIgnoreCase(Utilities.INITIAL_ACTION)) {
+            // Ignore action
+        } else if(action.getType().equalsIgnoreCase(Utilities.RESTORE_ACTION)) {
+            this.state = (T) action.getPayload();
+        } else {
+            T newState = reducer.reduce(action, (T) state.clone());
+            this.state = newState;
+        }
     }
 
     private void dispatchTimeTravel(Action action) {
@@ -141,6 +145,7 @@ public class DuxStore<T extends State> implements Store<T> {
     public void importStore(String json, Type type) {
         T state = this.gson.fromJson(json, type);
         this.state = state;
+        this.timeTravel.recordChange(new Action<>(Utilities.RESTORE_ACTION, state), state);
         this.notifyListeners();
     }
 
