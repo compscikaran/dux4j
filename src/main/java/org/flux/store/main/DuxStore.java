@@ -157,6 +157,10 @@ public class DuxStore<T extends State> implements Store<T> {
         this.asyncFlag = true;
     }
 
+    public void disableAsyncNotifications() {
+        this.asyncFlag = false;
+    }
+
     private void killProducer() {
         if(this.producer != null)
             this.producer.kill();
