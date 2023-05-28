@@ -1,11 +1,15 @@
 package org.flux.store.tests;
 
+import com.github.javafaker.Faker;
 import org.flux.store.api.Action;
 import org.flux.store.main.DuxStore;
 import org.flux.store.main.Utilities;
 import org.flux.store.tests.domain.UserProfile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.Arrays;
 import java.util.List;
@@ -109,6 +113,28 @@ public class TimeTravelTest {
         System.out.println(myStore.getState());
         assertEquals(newEmail, myStore.getState().getEmail());
         assertEquals(newName, myStore.getState().getName());
+    }
+
+    @ParameterizedTest
+    @CsvSource({"45,35", "7,3", "45, 20", "2,1", "100,1", "30,20", "20,19", "40,38"})
+    public void canTravelBackBeyondCheckpoint(String actionsValue, String pointValue) {
+        Integer numActions = Integer.valueOf(actionsValue);
+        Integer point = Integer.valueOf(pointValue);
+        String prevName = "";
+        Faker faker = new Faker();
+        for (int i = 0; i < numActions; i++) {
+            if(i == point) {
+                prevName = myStore.getState().getName();
+            }
+            String newName = faker.name().fullName();
+            myStore.dispatch(Utilities.actionCreator(ACTION_SET_NAME, newName));
+            System.out.println((i + 1) + ". " + myStore.getState());
+        }
+        for(int i = 0; i < (numActions - point); i++) {
+            myStore.goBack();
+        }
+        System.out.println(myStore.getState());
+        assertEquals(prevName, myStore.getState().getName());
     }
 
 }

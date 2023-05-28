@@ -13,12 +13,13 @@ import java.util.List;
 import java.util.Properties;
 import java.util.function.Consumer;
 
+@SuppressWarnings("rawtypes")
 public class DuxStore<T extends State> implements Store<T> {
 
-    private static Logger log = LoggerFactory.getLogger(DuxStore.class);
+    private static final Logger log = LoggerFactory.getLogger(DuxStore.class);
 
     private Reducer<T> reducer;
-    private TimeTravel<T> timeTravel;
+    private final TimeTravel<T> timeTravel;
     private T state;
     public List<Consumer<T>> listeners = new ArrayList<>();
     private Middleware<T> middleware;
@@ -31,7 +32,7 @@ public class DuxStore<T extends State> implements Store<T> {
         this.state = initialState;
         this.reducer = reducer;
         this.timeTravel = new TimeTravel<>();
-        this.timeTravel.recordChange(new Action<>(Utilities.INITIAL_ACTION, initialState));
+        this.timeTravel.recordChange(new Action<>(Utilities.INITIAL_ACTION, initialState), initialState);
         Runtime.getRuntime().addShutdownHook(new Thread(this::killProducer));
     }
 
@@ -65,12 +66,14 @@ public class DuxStore<T extends State> implements Store<T> {
         boolean isChanged = diffResult.getNumberOfDiffs() > 0;
         if(isChanged) {
             this.state = newState;
-            this.timeTravel.recordChange(action);
+            this.timeTravel.recordChange(action, newState);
             this.notifyListeners();
         }
     }
 
     private void dispatchNoNotify(Action action) {
+        if(action.getType().equalsIgnoreCase(Utilities.INITIAL_ACTION))
+            return;
         T newState = reducer.reduce(action, (T) state.clone());
         this.state = newState;
     }
@@ -102,10 +105,17 @@ public class DuxStore<T extends State> implements Store<T> {
     }
 
     public void goBack() {
-        this.timeTravel.goBack();
-        T initialState = this.timeTravel.getInitialState();
-        this.state = initialState;
-        List<Action> actionsToRecreateState = this.timeTravel.getActionHistory();
+        boolean recreateSnapshot = this.timeTravel.goBack();
+        this.state = this.timeTravel.getSnapshot();
+        if(recreateSnapshot) {
+            this.state = this.timeTravel.getInitialState();
+            List<Action> actionsForSnapshot = this.timeTravel.getActionHistory();
+            for (Action action: actionsForSnapshot) {
+                dispatchTimeTravel(action);
+            }
+            this.timeTravel.setSnapshot(this.state);
+        }
+        List<Action> actionsToRecreateState = this.timeTravel.getActionToRecreate();
         for (Action action: actionsToRecreateState) {
             dispatchTimeTravel(action);
         }
@@ -121,7 +131,7 @@ public class DuxStore<T extends State> implements Store<T> {
     }
 
     public List<String> getActionHistory() {
-        return this.timeTravel.getActionTypeHistory();
+        return this.timeTravel.getFullActionHistory();
     }
 
     public String exportStore() {
@@ -145,6 +155,10 @@ public class DuxStore<T extends State> implements Store<T> {
 
     public void enableAsyncNotifications() {
         this.asyncFlag = true;
+    }
+
+    public void disableAsyncNotifications() {
+        this.asyncFlag = false;
     }
 
     private void killProducer() {
