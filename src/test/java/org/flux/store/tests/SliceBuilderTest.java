@@ -2,39 +2,35 @@ package org.flux.store.tests;
 
 import org.flux.store.api.InvalidActionException;
 import org.flux.store.main.DuxSlice;
+import org.flux.store.main.DuxSliceBuilder;
 import org.flux.store.tests.domain.UserProfile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.Map;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class SliceTest {
+public class SliceBuilderTest {
 
     private DuxSlice<UserProfile> slice;
 
     @BeforeEach
     public void init() {
-        this.slice = DuxSlice.createSlice(
-                new UserProfile("Karan Gupta", "karan@hello.com"),
-                Map.ofEntries(
-                        Map.entry("setEmail", (action, state) -> {
-                            state.setEmail(action.getPayload().toString());
-                            return state;
-                        }),
-                        Map.entry("setName", (action, state) -> {
-                            state.setName(action.getPayload().toString());
-                            return state;
-                        })
-                ),
-                Arrays.asList(
-                        (state) -> System.out.println(state),
-                        (state) -> System.out.println("State has changed lol..")
-                ));
+        this.slice = new DuxSliceBuilder<UserProfile>()
+                .setInitialState(new UserProfile("Karan Gupta", "karan@hello.com"))
+                .addReducer("setEmail", (action, state) -> {
+                    state.setEmail(action.getPayload().toString());
+                    return state;
+                })
+                .addReducer("setName", (action, state) -> {
+                    state.setName(action.getPayload().toString());
+                    return state;
+                })
+                .addSubscriber((state) -> System.out.println(state))
+                .addSubscriber((state) -> System.out.println("State has changed lol.."))
+                .build();
     }
 
     @Test
