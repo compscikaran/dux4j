@@ -1,4 +1,4 @@
-package org.flux.store.main;
+package org.flux.store.utils;
 
 import org.flux.store.api.Action;
 import org.slf4j.Logger;

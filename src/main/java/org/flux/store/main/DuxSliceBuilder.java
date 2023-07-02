@@ -15,15 +15,12 @@ import java.util.function.Consumer;
 public class DuxSliceBuilder<T extends State> {
 
     private Map<String, Reducer<T>> reducers = new HashMap<>();
-
     private List<Consumer<T>> subscribers = new ArrayList<>();
-
     private Middleware<T> middleware;
-
     private T initialState;
-
     private Boolean asyncFlag = false;
-
+    private String backupPath;
+    private Boolean autoBackup = false;
     public DuxSliceBuilder<T> setInitialState(T initialState) {
         this.initialState = initialState;
         return this;
@@ -31,6 +28,16 @@ public class DuxSliceBuilder<T extends State> {
 
     public DuxSliceBuilder<T> setMiddleware(Middleware<T> middleware) {
         this.middleware = middleware;
+        return this;
+    }
+
+    public DuxSliceBuilder<T> setBackupPath(String backupPath) {
+        this.backupPath = backupPath;
+        return this;
+    }
+
+    public DuxSliceBuilder<T> enableAutoBackup() {
+        this.autoBackup = true;
         return this;
     }
 

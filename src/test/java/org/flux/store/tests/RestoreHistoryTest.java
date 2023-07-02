@@ -2,7 +2,7 @@ package org.flux.store.tests;
 
 import org.flux.store.api.Reducer;
 import org.flux.store.main.DuxStore;
-import org.flux.store.main.Utilities;
+import org.flux.store.utils.Utilities;
 import org.flux.store.tests.domain.Author;
 import org.flux.store.tests.domain.Book;
 import org.flux.store.tests.domain.CombinedState;
