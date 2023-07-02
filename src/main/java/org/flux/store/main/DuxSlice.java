@@ -1,16 +1,13 @@
 package org.flux.store.main;
 
-import org.flux.store.api.InvalidActionException;
-import org.flux.store.api.Middleware;
-import org.flux.store.api.Reducer;
-import org.flux.store.api.State;
+import org.flux.store.api.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class DuxSlice<T extends State> {
+public class DuxSlice<T extends State> implements Slice<T> {
 
     private DuxStore<T> store;
     private List<String> actions;
@@ -20,7 +17,7 @@ public class DuxSlice<T extends State> {
         this.actions = actions;
     }
 
-    public static <T extends State> DuxSlice<T> createSlice(T initialState, Map<String, Reducer<T>> reducers, List<Consumer<T>> subscribers, Middleware<T> middleware, Boolean asyncFlag) {
+    protected static <T extends State> DuxSlice<T> createSlice(T initialState, Map<String, Reducer<T>> reducers, List<Consumer<T>> subscribers, Middleware<T> middleware, Boolean asyncFlag) {
         Reducer<T> reducer = (action, state) -> {
             for (String key: reducers.keySet()) {
                 if(action.getType().equalsIgnoreCase(key)) {
@@ -46,16 +43,7 @@ public class DuxSlice<T extends State> {
         return slice;
     }
 
-    public static <T extends State> DuxSlice<T> createSlice(T initialState, Map<String, Reducer<T>> reducers, List<Consumer<T>> subscribers) {
-        return DuxSlice.createSlice(
-                initialState,
-                reducers,
-                subscribers,
-                null,
-                false);
-    }
-
-    public static <T extends State> DuxSlice<T> createSlice(DuxSliceBuilder<T> builder) {
+    protected static <T extends State> DuxSlice<T> createSlice(DuxSliceBuilder<T> builder) {
         return DuxSlice.createSlice(
                 builder.getInitialState(),
                 builder.getReducers(),
