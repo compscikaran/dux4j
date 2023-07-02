@@ -9,11 +9,9 @@ Redux like unidirectional state management implementation for Java.
 The idea came about when I had finished Facebook's Talk on Flux Architecture and seen few of Dan Abramov's interviews, and I thought to myself why this kind of pattern does not exist in java.
 So I set out to implement the same in the language I use everyday.
 
-------------------------
+## [Get Started](https://github.com/compscikaran/dux-java/wiki)
 
 ## What is DuxJava
-
-Get Started - https://github.com/compscikaran/dux-java/wiki
 
 Key Features -
 1. Simple Redux like Unidirectional application store
@@ -21,3 +19,4 @@ Key Features -
 3. Time travel debugging which allows to go to any previous or forward state in the store's history
 4. Allow backup and restore of application state and syncing application state to persistant storage
 5. Native Kafka Producer built in to stream state changes to specified Kafka topic
+
