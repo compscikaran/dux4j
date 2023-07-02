@@ -24,4 +24,4 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: maven
-    - run: mvn clean test -Djaas.config="$KAFKA_CONFIG" -Dbootstrap.servers="$KAFKA_CLUSTER" -Dkafka.topic=dux_test
+    - run: mvn clean test -DbackupPath="./test.json"

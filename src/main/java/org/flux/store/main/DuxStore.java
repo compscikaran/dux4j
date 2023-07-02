@@ -1,16 +1,19 @@
 package org.flux.store.main;
 
 import com.google.gson.Gson;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.DiffResult;
 import org.flux.store.api.*;
-import org.flux.store.kafka.Producer;
+import org.flux.store.utils.FileBackup;
+import org.flux.store.utils.AsyncProcessor;
+import org.flux.store.utils.TimeTravel;
+import org.flux.store.utils.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.function.Consumer;
 
 @SuppressWarnings("rawtypes")
@@ -23,16 +26,19 @@ public class DuxStore<T extends State> implements Store<T> {
     private T state;
     public List<Consumer<T>> listeners = new ArrayList<>();
     private Middleware<T> middleware;
-    private Producer producer;
     private Gson gson = new Gson();
 
     private boolean asyncFlag;
+
+    private boolean autoBackup;
+
+    private String backupPath;
 
     public DuxStore(T initialState, Reducer<T> reducer) {
         this.state = initialState;
         this.reducer = reducer;
         this.timeTravel.recordChange(new Action<>(Utilities.INITIAL_ACTION, initialState), initialState);
-        Runtime.getRuntime().addShutdownHook(new Thread(this::killProducer));
+        Runtime.getRuntime().addShutdownHook(new Thread(this::backupToFile));
     }
 
     public DuxStore(DuxStoreBuilder<T> builder) {
@@ -40,8 +46,11 @@ public class DuxStore<T extends State> implements Store<T> {
         this.reducer = builder.getReducer();
         this.listeners = builder.listeners;
         this.middleware = builder.getMiddleware();
+        this.asyncFlag = builder.getAsyncFlag();
+        this.autoBackup = builder.getAutoBackup();
+        this.backupPath = builder.getBackupPath();
         this.timeTravel.recordChange(new Action<>(Utilities.INITIAL_ACTION, builder.getInitialState()), builder.getInitialState());
-        Runtime.getRuntime().addShutdownHook(new Thread(this::killProducer));
+        Runtime.getRuntime().addShutdownHook(new Thread(this::backupToFile));
     }
 
     public DuxStore(T initialState, Reducer<T> reducer, Middleware<T> middleware) {
@@ -157,35 +166,30 @@ public class DuxStore<T extends State> implements Store<T> {
         this.notifyListeners();
     }
 
-    public void initializeKafkaProducer(Properties properties, String topic) {
-        try {
-            this.producer = new Producer(properties, topic);
-            this.subscribe(x -> this.sendMessageToKafka());
-        } catch (Exception ex) {
-            log.error("Could not initialize Producer", ex);
-        }
-    }
-
     public void enableAsyncNotifications() {
         this.asyncFlag = true;
     }
 
-    public void disableAsyncNotifications() {
-        this.asyncFlag = false;
+    public void enableAutoBackup() {
+        this.autoBackup = true;
     }
 
-    private void killProducer() {
-        if(this.producer != null)
-            this.producer.kill();
+    public void setBackupPath(String path) {
+        this.backupPath = path;
     }
 
-    private void sendMessageToKafka(){
-        try {
-            if (producer != null) {
-                producer.sendMessage(this.exportStore());
+    public void backupToFile() {
+        if(StringUtils.isNoneEmpty(this.backupPath) && this.autoBackup) {
+            FileBackup.saveBackup(this.backupPath, this.exportStore());
+        }
+    }
+
+    public void restoreFromFile(Type type) {
+        if(StringUtils.isNoneEmpty(this.backupPath) && this.autoBackup) {
+            String json = FileBackup.restoreBackup(this.backupPath);
+            if(StringUtils.isNoneEmpty(json)) {
+                this.importStore(json, type);
             }
-        } catch (Exception ex) {
-            log.error("Could not send state to Kafka", ex);
         }
     }
 }

@@ -1,7 +1,10 @@
 package org.flux.store.main;
 
+import org.apache.commons.lang3.StringUtils;
 import org.flux.store.api.*;
+import org.flux.store.utils.Utilities;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +20,7 @@ public class DuxSlice<T extends State> implements Slice<T> {
         this.actions = actions;
     }
 
-    protected static <T extends State> DuxSlice<T> createSlice(T initialState, Map<String, Reducer<T>> reducers, List<Consumer<T>> subscribers, Middleware<T> middleware, Boolean asyncFlag) {
+    protected static <T extends State> DuxSlice<T> createSlice(T initialState, Map<String, Reducer<T>> reducers, List<Consumer<T>> subscribers, Middleware<T> middleware, Boolean asyncFlag, Boolean autoBackup, String backupPath) {
         Reducer<T> reducer = (action, state) -> {
             for (String key: reducers.keySet()) {
                 if(action.getType().equalsIgnoreCase(key)) {
@@ -39,6 +42,12 @@ public class DuxSlice<T extends State> implements Slice<T> {
         if(asyncFlag) {
             myStore.enableAsyncNotifications();
         }
+        if(StringUtils.isNoneEmpty(backupPath)) {
+            myStore.setBackupPath(backupPath);
+        }
+        if(autoBackup) {
+            myStore.enableAutoBackup();
+        }
         DuxSlice<T> slice = new DuxSlice<>(myStore, new ArrayList<>(reducers.keySet()));
         return slice;
     }
@@ -49,7 +58,9 @@ public class DuxSlice<T extends State> implements Slice<T> {
                 builder.getReducers(),
                 builder.getSubscribers(),
                 builder.getMiddleware(),
-                builder.getAsyncFlag());
+                builder.getAsyncFlag(),
+                builder.getAutoBackup(),
+                builder.getBackupPath());
     }
 
     public Consumer getAction(String type) throws InvalidActionException {
@@ -60,5 +71,13 @@ public class DuxSlice<T extends State> implements Slice<T> {
 
     public T getState() {
         return store.getState();
+    }
+
+    public void restoreFromFile(Type type) {
+        store.restoreFromFile(type);
+    }
+
+    public void backupToFile() {
+        store.backupToFile();
     }
 }

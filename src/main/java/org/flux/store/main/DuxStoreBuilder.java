@@ -16,6 +16,9 @@ public class DuxStoreBuilder<T extends State> {
     private Reducer<T> reducer;
     public List<Consumer<T>> listeners = new ArrayList<>();
     private Middleware<T> middleware;
+    private String backupPath;
+    private Boolean autoBackup = false;
+    private Boolean asyncFlag = false;
 
     public DuxStoreBuilder<T> setInitialState(T initialState) {
         this.initialState = initialState;
@@ -34,6 +37,21 @@ public class DuxStoreBuilder<T extends State> {
 
     public DuxStoreBuilder<T> setMiddleware(Middleware<T> middleware) {
         this.middleware = middleware;
+        return this;
+    }
+
+    public DuxStoreBuilder<T> setBackupPath(String backupPath) {
+        this.backupPath = backupPath;
+        return this;
+    }
+
+    public DuxStoreBuilder<T> enableAutoBackup() {
+        this.autoBackup = true;
+        return this;
+    }
+
+    public DuxStoreBuilder<T> enableAsyncNotifications() {
+        this.asyncFlag = true;
         return this;
     }
 

@@ -2,7 +2,7 @@ package org.flux.store.tests;
 
 import org.flux.store.api.Action;
 import org.flux.store.api.Reducer;
-import org.flux.store.main.Utilities;
+import org.flux.store.utils.Utilities;
 import org.flux.store.main.DuxStore;
 import org.flux.store.tests.domain.UserProfile;
 import org.junit.jupiter.api.BeforeEach;

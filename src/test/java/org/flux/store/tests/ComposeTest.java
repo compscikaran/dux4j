@@ -4,7 +4,7 @@ import com.github.javafaker.Faker;
 import org.flux.store.api.Middleware;
 import org.flux.store.api.Reducer;
 import org.flux.store.main.DuxStore;
-import org.flux.store.main.Utilities;
+import org.flux.store.utils.Utilities;
 import org.flux.store.tests.domain.UserProfile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

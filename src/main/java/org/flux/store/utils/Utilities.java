@@ -1,13 +1,8 @@
-package org.flux.store.main;
+package org.flux.store.utils;
 
 import org.flux.store.api.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Consumer;
 
 public class Utilities {
 

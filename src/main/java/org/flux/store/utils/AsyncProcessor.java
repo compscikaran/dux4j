@@ -1,11 +1,10 @@
-package org.flux.store.main;
+package org.flux.store.utils;
 
 import org.flux.store.api.AsyncNotificationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
 
 public class AsyncProcessor {
