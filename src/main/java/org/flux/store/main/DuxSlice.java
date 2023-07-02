@@ -20,7 +20,7 @@ public class DuxSlice<T extends State> {
         this.actions = actions;
     }
 
-    public static <T extends State> DuxSlice<T> createSlice(T initialState, Map<String, Reducer<T>> reducers, List<Consumer<T>> subscribers, Middleware<T> middleware) {
+    public static <T extends State> DuxSlice<T> createSlice(T initialState, Map<String, Reducer<T>> reducers, List<Consumer<T>> subscribers, Middleware<T> middleware, Boolean asyncFlag) {
         Reducer<T> reducer = (action, state) -> {
             for (String key: reducers.keySet()) {
                 if(action.getType().equalsIgnoreCase(key)) {
@@ -39,6 +39,9 @@ public class DuxSlice<T extends State> {
         for (Consumer<T> subscriber: subscribers) {
             myStore.subscribe(subscriber);
         }
+        if(asyncFlag) {
+            myStore.enableAsyncNotifications();
+        }
         DuxSlice<T> slice = new DuxSlice<>(myStore, new ArrayList<>(reducers.keySet()));
         return slice;
     }
@@ -48,7 +51,8 @@ public class DuxSlice<T extends State> {
                 initialState,
                 reducers,
                 subscribers,
-                null);
+                null,
+                false);
     }
 
     public static <T extends State> DuxSlice<T> createSlice(DuxSliceBuilder<T> builder) {
@@ -56,7 +60,8 @@ public class DuxSlice<T extends State> {
                 builder.getInitialState(),
                 builder.getReducers(),
                 builder.getSubscribers(),
-                builder.getMiddleware());
+                builder.getMiddleware(),
+                builder.getAsyncFlag());
     }
 
     public Consumer getAction(String type) throws InvalidActionException {

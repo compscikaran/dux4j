@@ -9,12 +9,13 @@ import org.junit.jupiter.api.Test;
 
 import java.util.function.Consumer;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SliceBuilderTest {
 
     private DuxSlice<UserProfile> slice;
+
+    private boolean sampleState;
 
     @BeforeEach
     public void init() {
@@ -29,7 +30,15 @@ public class SliceBuilderTest {
                     return state;
                 })
                 .addSubscriber((state) -> System.out.println(state))
-                .addSubscriber((state) -> System.out.println("State has changed lol.."))
+                .addSubscriber((state) -> {
+                    try {
+                        Thread.sleep(5000);
+                        sampleState = true;
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .enableAsyncNotifications()
                 .build();
     }
 
@@ -43,6 +52,7 @@ public class SliceBuilderTest {
         setEmail.accept(newEmail);
         assertEquals(newName, slice.getState().getName());
         assertEquals(newEmail, slice.getState().getEmail());
+        assertFalse(sampleState);
     }
 
     @Test

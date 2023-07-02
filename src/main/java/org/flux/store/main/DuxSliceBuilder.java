@@ -22,6 +22,8 @@ public class DuxSliceBuilder<T extends State> {
 
     private T initialState;
 
+    private Boolean asyncFlag = false;
+
     public DuxSliceBuilder<T> setInitialState(T initialState) {
         this.initialState = initialState;
         return this;
@@ -39,6 +41,11 @@ public class DuxSliceBuilder<T extends State> {
 
     public DuxSliceBuilder<T> addSubscriber(Consumer<T> subscriber) {
         this.subscribers.add(subscriber);
+        return this;
+    }
+
+    public DuxSliceBuilder<T> enableAsyncNotifications() {
+        this.asyncFlag = true;
         return this;
     }
 
