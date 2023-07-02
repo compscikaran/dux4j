@@ -1,6 +1,7 @@
 package org.flux.store.tests;
 
 import org.flux.store.api.InvalidActionException;
+import org.flux.store.api.Slice;
 import org.flux.store.main.DuxSlice;
 import org.flux.store.main.DuxSliceBuilder;
 import org.flux.store.tests.domain.UserProfile;
@@ -13,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class SliceBuilderTest {
 
-    private DuxSlice<UserProfile> slice;
+    private Slice<UserProfile> slice;
 
     private boolean sampleState;
 
