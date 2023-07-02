@@ -32,8 +32,7 @@ public class AutoBackupTest {
                 })
                 .addSubscriber((state) -> System.out.println(state))
                 .enableAsyncNotifications()
-                .setBackupPath(System.getProperty("backupPath"))
-                .enableAutoBackup()
+                .enableAutoBackup(System.getProperty("backupPath"))
                 .build();
     }
 

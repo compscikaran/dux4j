@@ -31,13 +31,9 @@ public class DuxSliceBuilder<T extends State> {
         return this;
     }
 
-    public DuxSliceBuilder<T> setBackupPath(String backupPath) {
-        this.backupPath = backupPath;
-        return this;
-    }
-
-    public DuxSliceBuilder<T> enableAutoBackup() {
+    public DuxSliceBuilder<T> enableAutoBackup(String backupPath) {
         this.autoBackup = true;
+        this.backupPath = backupPath;
         return this;
     }
 
