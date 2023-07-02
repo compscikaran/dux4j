@@ -19,7 +19,7 @@ public class DuxStore<T extends State> implements Store<T> {
     private static final Logger log = LoggerFactory.getLogger(DuxStore.class);
 
     private Reducer<T> reducer;
-    private final TimeTravel<T> timeTravel;
+    private final TimeTravel<T> timeTravel = new TimeTravel<>();
     private T state;
     public List<Consumer<T>> listeners = new ArrayList<>();
     private Middleware<T> middleware;
@@ -31,8 +31,16 @@ public class DuxStore<T extends State> implements Store<T> {
     public DuxStore(T initialState, Reducer<T> reducer) {
         this.state = initialState;
         this.reducer = reducer;
-        this.timeTravel = new TimeTravel<>();
         this.timeTravel.recordChange(new Action<>(Utilities.INITIAL_ACTION, initialState), initialState);
+        Runtime.getRuntime().addShutdownHook(new Thread(this::killProducer));
+    }
+
+    public DuxStore(DuxStoreBuilder<T> builder) {
+        this.state = builder.getInitialState();
+        this.reducer = builder.getReducer();
+        this.listeners = builder.listeners;
+        this.middleware = builder.getMiddleware();
+        this.timeTravel.recordChange(new Action<>(Utilities.INITIAL_ACTION, builder.getInitialState()), builder.getInitialState());
         Runtime.getRuntime().addShutdownHook(new Thread(this::killProducer));
     }
 

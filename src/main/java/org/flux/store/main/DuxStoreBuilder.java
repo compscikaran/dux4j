@@ -1,0 +1,43 @@
+package org.flux.store.main;
+
+import lombok.Getter;
+import org.flux.store.api.Middleware;
+import org.flux.store.api.Reducer;
+import org.flux.store.api.State;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+
+@Getter
+public class DuxStoreBuilder<T extends State> {
+
+    private T initialState;
+    private Reducer<T> reducer;
+    public List<Consumer<T>> listeners = new ArrayList<>();
+    private Middleware<T> middleware;
+
+    public DuxStoreBuilder<T> setInitialState(T initialState) {
+        this.initialState = initialState;
+        return this;
+    }
+
+    public DuxStoreBuilder<T> setReducer(Reducer<T> reducer) {
+        this.reducer = reducer;
+        return this;
+    }
+
+    public DuxStoreBuilder<T> addListener(Consumer<T> listener) {
+        this.listeners.add(listener);
+        return this;
+    }
+
+    public DuxStoreBuilder<T> setMiddleware(Middleware<T> middleware) {
+        this.middleware = middleware;
+        return this;
+    }
+
+    public DuxStore<T> build() {
+        return new DuxStore<>(this);
+    }
+}
