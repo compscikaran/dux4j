@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AutoBackupTest {
-    private DuxSlice<UserProfile> slice;
+    private Slice<UserProfile> slice;
 
     private static final String newName = "Manoj Gupta";
 
