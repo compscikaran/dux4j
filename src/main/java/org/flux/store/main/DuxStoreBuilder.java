@@ -40,13 +40,9 @@ public class DuxStoreBuilder<T extends State> {
         return this;
     }
 
-    public DuxStoreBuilder<T> setBackupPath(String backupPath) {
-        this.backupPath = backupPath;
-        return this;
-    }
-
-    public DuxStoreBuilder<T> enableAutoBackup() {
+    public DuxStoreBuilder<T> enableAutoBackup(String backupPath) {
         this.autoBackup = true;
+        this.backupPath = backupPath;
         return this;
     }
 
