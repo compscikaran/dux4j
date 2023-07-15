@@ -69,15 +69,27 @@ public class DuxSlice<T extends State> implements Slice<T> {
         return payload -> store.dispatch(Utilities.actionCreator(type, payload));
     }
 
+    @Override
+    public void restore(StoreBackup<T> backup) {
+        this.store.restore(backup);
+    }
+
+    @Override
+    public StoreBackup<T> backup() {
+        return this.store.backup();
+    }
+
+    @Override
+    public void goBack() {
+        this.store.goBack();
+    }
+
+    @Override
+    public void goForward() {
+        this.store.goForward();
+    }
+
     public T getState() {
         return store.getState();
-    }
-
-    public void restoreFromFile(Type type) {
-        store.restoreFromFile(type);
-    }
-
-    public void backupToFile() {
-        store.backupToFile();
     }
 }

@@ -1,6 +1,7 @@
 package org.flux.store.tests;
 
 import org.flux.store.api.Reducer;
+import org.flux.store.api.StoreBackup;
 import org.flux.store.main.DuxStore;
 import org.flux.store.utils.Utilities;
 import org.flux.store.tests.domain.Author;
@@ -50,10 +51,9 @@ public class RestoreHistoryTest {
         myStore.dispatch(Utilities.actionCreator(ACTION_SET_BOOK, new Book(newBook)));
         String newAuthor = "Blake Crouch";
         myStore.dispatch(Utilities.actionCreator(ACTION_SET_AUTHOR, new Author(newAuthor)));
-        String json = myStore.exportStore();
-        backup = json;
+        StoreBackup<CombinedState> backup = myStore.backup();
         this.init();
-        myStore.importStore(backup, CombinedState.class);
+        myStore.restore(backup);
         String newBook2 = "Recursion";
         myStore.dispatch(Utilities.actionCreator(ACTION_SET_BOOK, new Book(newBook2)));
         System.out.println(myStore.getState());
