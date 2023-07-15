@@ -1,5 +1,7 @@
 package org.flux.store.utils;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.flux.store.api.Action;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("rawtypes")
+@Getter
 public class TimeTravel<T> {
     private static final Logger log = LoggerFactory.getLogger(TimeTravel.class);
     private final List<Action> actions;
@@ -20,6 +23,12 @@ public class TimeTravel<T> {
     public TimeTravel() {
         this.actions = Collections.synchronizedList(new ArrayList<>());
         this.index = -1;
+    }
+
+    public TimeTravel(T snapshot, List<Action> actions, Integer index) {
+        this.actions = Collections.synchronizedList(new ArrayList<>(actions));
+        this.index = index;
+        this.snapshot = snapshot;
     }
 
     public void recordChange(Action action, T newState) {

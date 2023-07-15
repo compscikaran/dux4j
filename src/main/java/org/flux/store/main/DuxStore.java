@@ -22,7 +22,7 @@ public class DuxStore<T extends State> implements Store<T> {
     private static final Logger log = LoggerFactory.getLogger(DuxStore.class);
 
     private Reducer<T> reducer;
-    private final TimeTravel<T> timeTravel = new TimeTravel<>();
+    private TimeTravel<T> timeTravel = new TimeTravel<>();
     private T state;
     public List<Consumer<T>> listeners = new ArrayList<>();
     private Middleware<T> middleware;
@@ -117,6 +117,20 @@ public class DuxStore<T extends State> implements Store<T> {
         this.reducer = newReducer;
     }
 
+    @Override
+    public void restore(StoreBackup<T> backup) {
+        this.state = backup.getCurrentState();
+        this.timeTravel = new TimeTravel<>(backup.getLatestSnapshot(), backup.getActions(), backup.getCurrentIndex());
+    }
+
+    @Override
+    public StoreBackup<T> backup() {
+        return new StoreBackup<>(this.state,
+                this.timeTravel.getSnapshot(),
+                this.timeTravel.getActions(),
+                this.timeTravel.getIndex());
+    }
+
     private void notifyListeners() {
         if(!asyncFlag) {
             this.listeners.forEach(l -> l.accept(this.state));
@@ -155,17 +169,6 @@ public class DuxStore<T extends State> implements Store<T> {
         return this.timeTravel.getFullActionHistory();
     }
 
-    public String exportStore() {
-        return this.gson.toJson(this.state);
-    }
-
-    public void importStore(String json, Type type) {
-        T state = this.gson.fromJson(json, type);
-        this.state = state;
-        this.timeTravel.recordChange(new Action<>(Utilities.RESTORE_ACTION, state), state);
-        this.notifyListeners();
-    }
-
     public void enableAsyncNotifications() {
         this.asyncFlag = true;
     }
@@ -178,18 +181,9 @@ public class DuxStore<T extends State> implements Store<T> {
         this.backupPath = path;
     }
 
-    public void backupToFile() {
+    protected void backupToFile() {
         if(StringUtils.isNoneEmpty(this.backupPath) && this.autoBackup) {
-            FileBackup.saveBackup(this.backupPath, this.exportStore());
-        }
-    }
-
-    public void restoreFromFile(Type type) {
-        if(StringUtils.isNoneEmpty(this.backupPath) && this.autoBackup) {
-            String json = FileBackup.restoreBackup(this.backupPath);
-            if(StringUtils.isNoneEmpty(json)) {
-                this.importStore(json, type);
-            }
+            FileBackup.saveBackup(this.backupPath, this.gson.toJson(this.backup()));
         }
     }
 }

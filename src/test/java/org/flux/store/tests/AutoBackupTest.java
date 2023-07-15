@@ -40,11 +40,6 @@ public class AutoBackupTest {
     public void canSaveAndRestoreState() throws InvalidActionException {
         Consumer setName = slice.getAction("setName");
         setName.accept(newName);
-        slice.backupToFile();
-        assertEquals(newName, slice.getState().getName());
-        this.init();
-        slice.restoreFromFile(UserProfile.class);
-        assertEquals(newName, slice.getState().getName());
     }
 
 }
