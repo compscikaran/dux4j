@@ -8,6 +8,13 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <artifactId>dux-java</artifactId>
     <version>1.8.1</version>
     <packaging>jar</packaging>
+    <name>DuxJava</name>
+    <description>Flux based Unidirectional store for Java</description>
+    <url>https://github.com/compscikaran/dux-java</url>
+
+    <scm>
+        <url>https://github.com/compscikaran/dux-java/tree/master</url>
+    </scm>
 
     <distributionManagement>
 <!--        <repository>-->
