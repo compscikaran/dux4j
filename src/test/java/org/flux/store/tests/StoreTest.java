@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class StoreTest {
+public class  StoreTest {
 
     public static final String INITIAL_EMAIL = "karan@hello.com";
     public static final String INITIAL_NAME = "Karan Gupta";

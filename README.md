@@ -18,5 +18,3 @@ Key Features -
 2. Supports all the familiar patterns such as reducers, subscribers, actions, action creators, thunks, middlewares
 3. Time travel debugging which allows to go to any previous or forward state in the store's history
 4. Allow backup and restore of application state and syncing application state to persistant storage
-5. Native Kafka Producer built in to stream state changes to specified Kafka topic
-
