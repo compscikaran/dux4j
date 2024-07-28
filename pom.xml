@@ -10,7 +10,7 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <packaging>jar</packaging>
     <name>Dux4J</name>
     <description>Flux based Unidirectional store for Java</description>
-    <url>https://github.com/compscikaran/dux-java</url>
+    <url>https://github.com/compscikaran/dux4j</url>
 
     <scm>
         <url>https://github.com/compscikaran/dux-java/tree/master</url>
