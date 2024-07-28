@@ -4,11 +4,11 @@
 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.compscikaran</groupId>
-    <artifactId>dux-java</artifactId>
-    <version>2.0.0</version>
+    <groupId>dev.engineeringmadness</groupId>
+    <artifactId>dux4j</artifactId>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
-    <name>DuxJava</name>
+    <name>Dux4J</name>
     <description>Flux based Unidirectional store for Java</description>
     <url>https://github.com/compscikaran/dux-java</url>
 
